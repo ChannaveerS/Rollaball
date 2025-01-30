@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
             other.gameObject.SetActive(false);
             count++;
             setCountText();
-            if (count == 12)
+            if (count == 15)
             {
                 countText.text = "You Win!";
             }
