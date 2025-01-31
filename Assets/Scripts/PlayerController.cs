@@ -10,13 +10,16 @@ public class PlayerController : MonoBehaviour
     private float movementX;
     private float movementY;
     private int count = 0;
+    public int timeToAdd = 5;
 
+    private TimerScript timerScript ;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         // initially get the Rigidbody component and store in rb variable
         rb = GetComponent<Rigidbody>();
         setCountText();
+        timerScript = Object.FindFirstObjectByType<TimerScript>();
     }
 
     // this function is called when the player moves
@@ -57,6 +60,12 @@ public class PlayerController : MonoBehaviour
             {
                 countText.text = "You Win!";
             }
+        }
+        if (other.gameObject.CompareTag("Extratime"))
+        {
+            other.gameObject.SetActive(false);
+            countText.text = "+"+timeToAdd + "sec";
+            timerScript.AddTime(timeToAdd);
         }
     }
 

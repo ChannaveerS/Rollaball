@@ -54,4 +54,13 @@ public class TimerScript : MonoBehaviour
         // Optional: Display a Game Over UI or Restart option
         Debug.Log("Game Over! Timer has ended.");
     }
+
+    private void Addtime()
+    {
+        remainingTime += Time.deltaTime; 
+    }
+    public void AddTime(int time)
+    {
+        remainingTime += time; // Add 5 seconds to the remaining time
+    }
 }
