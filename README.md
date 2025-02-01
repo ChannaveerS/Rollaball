@@ -42,7 +42,7 @@ The goal of the game is to collect all pickups scattered across the maze while a
 2.Open Unity Hub.
 Add the cloned folder as an existing project.
 Ensure you are using the compatible Unity version (e.g., Unity 2023.1.0 or later).
-
+NOTE - After opening the project in unity, open goto Assets->Scenes->open Minigame scene
 3.Play the Game:
 Open the MainScene in the Unity Editor.
 Click on the Play button to start the game.
