@@ -56,4 +56,23 @@ Pickups: Adds to your score.
 Extra Time: Grants bonus seconds on the timer.
 Avoid hitting walls to maintain your speed.
 
+---
+
+## Technologies Used
+Game Engine: Unity
+Programming Language: C# for scripting
+Assets:
+Unity-provided standard assets.
+Custom 3D models and materials for pickups and power-ups.
+
+---
+## Known Issues or Limitations
+The game currently lacks advanced animations and sound effects.
+Performance optimizations for larger mazes are yet to be implemented.
+
+---
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+
 
