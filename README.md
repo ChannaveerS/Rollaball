@@ -1,3 +1,4 @@
+![image](https://github.com/user-attachments/assets/79b9dac2-c54d-49a4-8898-4278251fa1cb)
 # Roll-a-Ball Game
 
 Welcome to the **Roll-a-Ball** game! This project is a simple 3D game built using Unity where the player controls a ball to collect pickups and power-ups while navigating through a maze.
