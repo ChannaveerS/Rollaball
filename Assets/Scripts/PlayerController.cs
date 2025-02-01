@@ -68,6 +68,7 @@ public class PlayerController : MonoBehaviour
             if (count == 15)
             {
                 countText.text = "You Win!";
+                rb.isKinematic = true;
             }
         }
 
