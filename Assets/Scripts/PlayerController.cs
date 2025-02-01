@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
-// This class is responsible for controlling the player
+using System.Collections;
+
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 08;
+    public float speed = 8f;
     public TextMeshProUGUI countText;
     private Rigidbody rb = null;
     private float movementX;
@@ -12,65 +13,104 @@ public class PlayerController : MonoBehaviour
     private int count = 0;
     public int timeToAdd = 5;
 
-    private TimerScript timerScript ;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // Slowdown variables
+    public float slowDownMultiplier = 0.5f; // Factor to reduce speed
+    public float slowDownDuration = 3f;    // Duration of slowdown in seconds
+    private bool isSlowedDown = false;
+    private float normalSpeed;
+
+    // Reference to TimerScript
+    private TimerScript timerScript;
+
     void Start()
     {
-        // initially get the Rigidbody component and store in rb variable
         rb = GetComponent<Rigidbody>();
+        normalSpeed = speed;
         setCountText();
+
         timerScript = Object.FindFirstObjectByType<TimerScript>();
+
+        if (timerScript == null)
+        {
+            Debug.LogError("TimerScript not found in the scene!");
+        }
     }
 
-    // this function is called when the player moves
-    // InputValue is a class in UnityEngine.InputSystem and is used to store the value of the input
-    void OnMove(InputValue movementValue) 
+    void OnMove(InputValue movementValue)
     {
-        // 2d vector to store the movement value
         Vector2 movementVector = movementValue.Get<Vector2>();
         movementX = movementVector.x;
         movementY = movementVector.y;
-         
     }
-    // FixedUpdate is called once per frame
-    // it is called before physics calculations
-    // it is used to apply forces to the Rigidbody
+
     void FixedUpdate()
     {
         Vector3 movement = new Vector3(movementX, 0.0f, movementY);
         rb.AddForce(movement * speed);
-
     }
 
-    // this function is called when the player collides with other object
-    // Collider is a class in UnityEngine and is used to store the collision data
-    // other is the collider that the player collided with
-    // OnTriggerEnter is called when the Collider other enters the trigger
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Wall") && !isSlowedDown)
+        {
+            StartCoroutine(SlowDownPlayer());
+        }
+    }
+
     void OnTriggerEnter(Collider other)
     {
-        // Check if the object the player collided with has the "PickUp" tag.
-
         if (other.gameObject.CompareTag("Pickup"))
-        { // Deactivate the collided object (making it disappear).
-
+        {
             other.gameObject.SetActive(false);
             count++;
             setCountText();
+
             if (count == 15)
             {
                 countText.text = "You Win!";
             }
         }
+
         if (other.gameObject.CompareTag("Extratime"))
         {
             other.gameObject.SetActive(false);
-            countText.text = "+"+timeToAdd + "sec";
+            StartCoroutine(DisplayExtraTime("+ " + timeToAdd + " sec"));
             timerScript.AddTime(timeToAdd);
         }
     }
 
+    private IEnumerator SlowDownPlayer()
+    {
+        isSlowedDown = true;
+        float previousSpeed = speed;
+        speed *= slowDownMultiplier; // Reduce speed
+        Debug.Log("Player slowed down! New speed: " + speed);
+
+        float remainingTime = slowDownDuration;
+
+        while (remainingTime > 0)
+        {
+            countText.text = $"Slowed Down: {remainingTime:F1} seconds left";
+            remainingTime -= Time.deltaTime;
+            yield return null; // Wait for the next frame
+        }
+
+        speed = previousSpeed; // Restore original speed
+        isSlowedDown = false;
+        Debug.Log("Player speed restored! Speed: " + speed);
+
+        setCountText(); // Revert the text back to normal
+    }
+
+    private IEnumerator DisplayExtraTime(string message)
+    {
+        countText.text = message;
+        yield return new WaitForSeconds(2f); // Display the message for 2 seconds
+        setCountText();
+    }
+
     void setCountText()
     {
-        countText   .text = "Count - " + count.ToString();
+        countText.text = "Count - " + count.ToString();
     }
 }
